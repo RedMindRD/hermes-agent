@@ -68,6 +68,8 @@ services:
       - gateway
     networks:
       - dokploy-network
+    ports:
+      - 9119:9119
     volumes:
       - ../hermes/:/opt/data
     environment:
