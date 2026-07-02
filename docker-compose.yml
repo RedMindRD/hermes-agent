@@ -34,7 +34,7 @@ services:
     restart: unless-stopped
     network_mode: host
     volumes:
-      - ~/.hermes:/opt/data
+      - ../hermes/:/opt/data
     environment:
       - HERMES_UID=${HERMES_UID:-10000}
       - HERMES_GID=${HERMES_GID:-10000}
@@ -69,7 +69,7 @@ services:
     networks:
       - dokploy-network
     volumes:
-      - ~/.hermes:/opt/data
+      - ../hermes/:/opt/data
     environment:
       - HERMES_UID=${HERMES_UID:-10000}
       - HERMES_GID=${HERMES_GID:-10000}
