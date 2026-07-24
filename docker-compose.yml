@@ -59,7 +59,8 @@ services:
       # - GOOGLE_CHAT_SERVICE_ACCOUNT_JSON=${GOOGLE_CHAT_SERVICE_ACCOUNT_JSON}
       # - GOOGLE_CHAT_ALLOWED_USERS=${GOOGLE_CHAT_ALLOWED_USERS}
     command: ["gateway", "run"]
-
+    networks:
+      - litellm-ai-network
   dashboard:
     image: hermes-agent
     container_name: hermes-dashboard
@@ -79,3 +80,9 @@ services:
       - HERMES_DASHBOARD_BASIC_AUTH_PASSWORD=${HERMES_DASHBOARD_BASIC_AUTH_PASSWORD}
       - HERMES_DASHBOARD_BASIC_AUTH_SECRET=${HERMES_DASHBOARD_BASIC_AUTH_SECRET}
     command: ["dashboard", "--host", "0.0.0.0", "--no-open"]
+    networks:
+      - litellm-ai-network
+networks:
+  litellm-ai-network:
+    external: true
+    name: litellm-ai-network
