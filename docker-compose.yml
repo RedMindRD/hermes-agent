@@ -69,6 +69,7 @@ services:
       - gateway
     networks:
       - dokploy-network
+      - litellm-ai-network
     ports:
       - 9119:9119
     volumes:
@@ -80,8 +81,7 @@ services:
       - HERMES_DASHBOARD_BASIC_AUTH_PASSWORD=${HERMES_DASHBOARD_BASIC_AUTH_PASSWORD}
       - HERMES_DASHBOARD_BASIC_AUTH_SECRET=${HERMES_DASHBOARD_BASIC_AUTH_SECRET}
     command: ["dashboard", "--host", "0.0.0.0", "--no-open"]
-    networks:
-      - litellm-ai-network
+
 networks:
   litellm-ai-network:
     external: true
