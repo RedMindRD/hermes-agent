@@ -32,7 +32,7 @@ services:
     image: hermes-agent
     container_name: hermes
     restart: unless-stopped
-    network_mode: host
+    #network_mode: host
     volumes:
       - ../hermes/:/opt/data
     environment:
