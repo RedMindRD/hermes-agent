@@ -1,0 +1,11 @@
+# This directory is a live HERMES_HOME. Once `hermes serve` runs against it,
+# Hermes will create config.yaml, .env (API KEYS/SECRETS), logs/, sessions/,
+# memories/, cron/ here. Ignore everything by default; allowlist only the
+# hand-authored, committable pieces.
+*
+!.gitignore
+!SOUL.md
+!context/
+!context/**
+!skills/
+!skills/**
