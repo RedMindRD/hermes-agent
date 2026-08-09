@@ -12,7 +12,7 @@ Hermes 提供了一套插件系统，可在不修改核心代码的情况下添�
 如果你想为自己、团队或某个项目创建自定义工具，这通常是正确的路径。开发者指南中的
 [Adding Tools](/developer-guide/adding-tools) 页面针对的是存放在 `tools/` 和 `toolsets.py` 中的 Hermes 内置核心工具。
 
-**→ [构建 Hermes Plugin](/guides/build-a-hermes-plugin)** — 包含完整可运行示例的分步指南。
+**→ [构建 Hermes Plugin](/developer-guide/plugins)** — 包含完整可运行示例的分步指南。
 
 ## 快速概览
 
@@ -75,7 +75,6 @@ def register(ctx):
         toolset="hello_world",
         schema=schema,
         handler=handle_hello,
-        description="Return a friendly greeting for the given name.",
     )
 
     # --- Hook: log every tool call ---
@@ -86,6 +85,8 @@ def register(ctx):
 ```
 
 将两个文件放入 `~/.hermes/plugins/hello-world/`，重启 Hermes，模型即可立即调用 `hello_world`。每次工具调用后，hook 会打印一行日志。
+
+面向模型的工具描述应写在 `schema["description"]` 中。可选的 `ctx.register_tool(description=...)` 值是独立的 `ToolEntry` 注册表元数据：省略时，它会默认使用 schema 中的描述；但如果 schema 缺少 `description`，Hermes 不会把该元数据反向复制到 schema。建议只在 schema 中定义一次描述。如果同时提供两个值，请保持同步；模型看到的是 schema 中的值。
 
 `./.hermes/plugins/` 下的项目本地插件默认禁用。仅对可信仓库启用，方法是在启动 Hermes 前设置 `HERMES_ENABLE_PROJECT_PLUGINS=true`。
 
@@ -221,9 +222,9 @@ Memory provider 和 context engine 是 **provider 插件** — 每种类型同�
 
 | 想要添加… | 方式 | 编写指南 |
 |---|---|---|
-| LLM 可调用的**工具** | Python 插件 — `ctx.register_tool()` | [Build a Hermes Plugin](/guides/build-a-hermes-plugin) · [Adding Tools](/developer-guide/adding-tools) |
-| **生命周期 hook**（LLM 前后、会话开始/结束、工具过滤） | Python 插件 — `ctx.register_hook()` | [Hooks reference](/user-guide/features/hooks) · [Build a Hermes Plugin](/guides/build-a-hermes-plugin) |
-| CLI / gateway 的**斜杠命令** | Python 插件 — `ctx.register_command()` | [Build a Hermes Plugin](/guides/build-a-hermes-plugin) · [Extending the CLI](/developer-guide/extending-the-cli) |
+| LLM 可调用的**工具** | Python 插件 — `ctx.register_tool()` | [Build a Hermes Plugin](/developer-guide/plugins) · [Adding Tools](/developer-guide/adding-tools) |
+| **生命周期 hook**（LLM 前后、会话开始/结束、工具过滤） | Python 插件 — `ctx.register_hook()` | [Hooks reference](/user-guide/features/hooks) · [Build a Hermes Plugin](/developer-guide/plugins) |
+| CLI / gateway 的**斜杠命令** | Python 插件 — `ctx.register_command()` | [Build a Hermes Plugin](/developer-guide/plugins) · [Extending the CLI](/developer-guide/extending-the-cli) |
 | `hermes <thing>` 的**子命令** | Python 插件 — `ctx.register_cli_command()` | [Extending the CLI](/developer-guide/extending-the-cli) |
 | 插件附带的**skill** | Python 插件 — `ctx.register_skill()` | [Creating Skills](/developer-guide/creating-skills) |
 | **推理后端**（LLM provider：OpenAI 兼容、Codex、Anthropic-Messages、Bedrock） | Provider 插件 — 在 `plugins/model-providers/<name>/` 中调用 `register_provider(ProviderProfile(...))` | **[Model Provider Plugins](/developer-guide/model-provider-plugin)** · [Adding Providers](/developer-guide/adding-providers) |
@@ -347,4 +348,4 @@ ctx.inject_message("New data arrived from the webhook", role="user")
 `inject_message` 仅在 CLI 模式下可用。在 gateway 模式下，没有 CLI 引用，该方法返回 `False`。
 :::
 
-完整的处理器约定、schema 格式、hook 行为、错误处理和常见错误请参见 **[完整指南](/guides/build-a-hermes-plugin)**。
+完整的处理器约定、schema 格式、hook 行为、错误处理和常见错误请参见 **[完整指南](/developer-guide/plugins)**。
