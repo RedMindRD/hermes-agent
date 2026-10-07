@@ -38,6 +38,13 @@ services:
     environment:
       - HERMES_UID=${HERMES_UID:-10000}
       - HERMES_GID=${HERMES_GID:-10000}
+      # LiteLLM (OpenAI-compatible) endpoint on the shared llm-net network.
+      # Override LLM_BASE_URL / LLM_API_KEY in the Dokploy environment.
+      # Hermes' "custom" model provider reads OPENAI_BASE_URL + OPENAI_API_KEY;
+      # config.yaml can also reference ${LLM_BASE_URL} directly.
+      - LLM_BASE_URL=${LLM_BASE_URL:-http://litellm:4000}
+      - OPENAI_BASE_URL=${LLM_BASE_URL:-http://litellm:4000}/v1
+      - OPENAI_API_KEY=${LLM_API_KEY:-none}
       # To expose the OpenAI-compatible API server beyond localhost,
       # uncomment BOTH lines (API_SERVER_KEY is mandatory for auth):
       # - API_SERVER_HOST=0.0.0.0
@@ -60,7 +67,7 @@ services:
       # - GOOGLE_CHAT_ALLOWED_USERS=${GOOGLE_CHAT_ALLOWED_USERS}
     command: ["gateway", "run"]
     networks:
-      - litellm-ai-network
+      - llm-net
   dashboard:
     image: hermes-agent
     container_name: hermes-dashboard
@@ -69,7 +76,7 @@ services:
       - gateway
     networks:
       - dokploy-network
-      - litellm-ai-network
+      - llm-net
     ports:
       - 9119:9119
     volumes:
@@ -77,12 +84,19 @@ services:
     environment:
       - HERMES_UID=${HERMES_UID:-10000}
       - HERMES_GID=${HERMES_GID:-10000}
+      # LiteLLM (OpenAI-compatible) endpoint on the shared llm-net network.
+      # Override LLM_BASE_URL / LLM_API_KEY in the Dokploy environment.
+      # Hermes' "custom" model provider reads OPENAI_BASE_URL + OPENAI_API_KEY;
+      # config.yaml can also reference ${LLM_BASE_URL} directly.
+      - LLM_BASE_URL=${LLM_BASE_URL:-http://litellm:4000}
+      - OPENAI_BASE_URL=${LLM_BASE_URL:-http://litellm:4000}/v1
+      - OPENAI_API_KEY=${LLM_API_KEY:-none}
       - HERMES_DASHBOARD_BASIC_AUTH_USERNAME=${HERMES_DASHBOARD_BASIC_AUTH_USERNAME}
       - HERMES_DASHBOARD_BASIC_AUTH_PASSWORD=${HERMES_DASHBOARD_BASIC_AUTH_PASSWORD}
       - HERMES_DASHBOARD_BASIC_AUTH_SECRET=${HERMES_DASHBOARD_BASIC_AUTH_SECRET}
     command: ["dashboard", "--host", "0.0.0.0", "--no-open"]
 
 networks:
-  litellm-ai-network:
+  llm-net:
     external: true
-    name: litellm-ai-network
+    name: ${LLM_NETWORK:-litellm-ai-network}
