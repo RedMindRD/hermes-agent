@@ -1154,6 +1154,12 @@ platform_toolsets:
 #     args: ["-y", "@modelcontextprotocol/server-github"]
 #     env:
 #       GITHUB_PERSONAL_ACCESS_TOKEN: "ghp_..."
+#   wh-crm:
+#     command: python
+#     args: ["/opt/hermes/custom-hermes/mcp/wh-crm/server.py"]
+#     env:
+#       CRM_BASE_URL: http://web:8080
+#       CRM_API_TOKEN: ${CRM_API_TOKEN:-}
 #
 # Sampling (server-initiated LLM requests) — enabled by default.
 # Per-server config under the 'sampling' key:

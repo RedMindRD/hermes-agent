@@ -45,6 +45,9 @@ services:
       - LLM_BASE_URL=${LLM_BASE_URL:-http://litellm:4000}
       - OPENAI_BASE_URL=${LLM_BASE_URL:-http://litellm:4000}/v1
       - OPENAI_API_KEY=${LLM_API_KEY:-none}
+      # WH-CRM MCP integration
+      - CRM_BASE_URL=${CRM_BASE_URL:-http://web:8080}
+      - CRM_API_TOKEN=${CRM_API_TOKEN:-}
       # To expose the OpenAI-compatible API server beyond localhost,
       # uncomment BOTH lines (API_SERVER_KEY is mandatory for auth):
       # - API_SERVER_HOST=0.0.0.0
@@ -91,12 +94,18 @@ services:
       - LLM_BASE_URL=${LLM_BASE_URL:-http://litellm:4000}
       - OPENAI_BASE_URL=${LLM_BASE_URL:-http://litellm:4000}/v1
       - OPENAI_API_KEY=${LLM_API_KEY:-none}
+      # WH-CRM MCP integration
+      - CRM_BASE_URL=${CRM_BASE_URL:-http://web:8080}
+      - CRM_API_TOKEN=${CRM_API_TOKEN:-}
       - HERMES_DASHBOARD_BASIC_AUTH_USERNAME=${HERMES_DASHBOARD_BASIC_AUTH_USERNAME}
       - HERMES_DASHBOARD_BASIC_AUTH_PASSWORD=${HERMES_DASHBOARD_BASIC_AUTH_PASSWORD}
       - HERMES_DASHBOARD_BASIC_AUTH_SECRET=${HERMES_DASHBOARD_BASIC_AUTH_SECRET}
     command: ["dashboard", "--host", "0.0.0.0", "--no-open"]
 
 networks:
+  dokploy-network:
+    external: true
+    name: ${DOKPLOY_NETWORK:-dokploy-network}
   llm-net:
     external: true
     name: ${LLM_NETWORK:-litellm-ai-network}

@@ -59,11 +59,11 @@ Hermes reads MCP servers from `~/.hermes/config.yaml` under `mcp_servers`
 ```yaml
 mcp_servers:
   wh-crm:
-    command: "/home/hermes/.venvs/wh-crm-mcp/bin/python"
-    args: ["/srv/Whatsapp_AI_CRM/hermes-mcp/server.py"]
+    command: python
+    args: ["/opt/hermes/custom-hermes/mcp/wh-crm/server.py"]
     env:
-      CRM_BASE_URL: "https://crm.example.com"
-      CRM_API_TOKEN: "<token from hermes:token>"
+      CRM_BASE_URL: "http://web:8080"
+      CRM_API_TOKEN: "${CRM_API_TOKEN:-}"
     timeout: 60
 ```
 
