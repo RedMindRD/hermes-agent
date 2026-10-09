@@ -47,6 +47,8 @@ class CrmConfig:
     @classmethod
     def from_env(cls) -> "CrmConfig":
         base_url = os.environ.get("CRM_BASE_URL", "").strip().rstrip("/")
+        if base_url.endswith("/api"):
+            base_url = base_url[:-4].rstrip("/")
         token = os.environ.get("CRM_API_TOKEN", "").strip()
         if not base_url:
             raise CrmError("CRM_BASE_URL is not set. Point it at the CRM, e.g. https://crm.example.com.")
